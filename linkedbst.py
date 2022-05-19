@@ -119,7 +119,7 @@ class LinkedBST(AbstractCollection):
                 recurse(node.right)
                 # End of recurse
 
-        # Tree is empty, so new item goes at the root
+        # Tree is empty, so new item goes at the _root
         if self.isEmpty():
             self._root = BSTNode(item)
         # Otherwise, search for the item's spot
@@ -157,9 +157,9 @@ class LinkedBST(AbstractCollection):
 
         # Attempt to locate the node containing the item
         item_removed = None
-        preRoot = BSTNode(None)
-        preRoot.left = self._root
-        parent = preRoot
+        pre_root = BSTNode(None)
+        pre_root.left = self._root
+        parent = pre_root
         direction = 'L'
         currentNode = self._root
         while not currentNode == None:
@@ -202,14 +202,14 @@ class LinkedBST(AbstractCollection):
             else:
                 parent.right = new_child
 
-        # All cases: Reset the root (if it hasn't changed no harm done)
+        # All cases: Reset the _root (if it hasn't changed no harm done)
         #            Decrement the collection's size counter
         #            Return the item
         self._size -= 1
         if self.isEmpty():
             self._root = None
         else:
-            self._root = preRoot.left
+            self._root = pre_root.left
         return item_removed
 
     def replace(self, item, new_item):
@@ -330,20 +330,21 @@ class LinkedBST(AbstractCollection):
         """
         def basic_find(contain, index):
             return contain[index]
-        def binary_sorted_tree(contain, word):
+        # def binary_sorted_tree(contain, word):
+        #     ind = contain.find(word)
+        #     return ind
+
+        def binary_tree(contain, word):
             ind = contain.find(word)
             return ind
 
-        def binary_tree(contain, word):
-            pass
-
-        def balanced_binary_tree(contain, word):
-            pass
+        # def balanced_binary_tree(contain, word):
+        #     ind = contain.find(word)
+        #     return ind
 
         with open(path, "r") as data:
             words = data.read().splitlines()[:1000]
-        random_word = random.choice(words)
-        random_ind = random.randint(0, len(words))
+        
 
         def create_tree(list_of_words):
             sorted_tree = LinkedBST()
@@ -352,28 +353,36 @@ class LinkedBST(AbstractCollection):
             return sorted_tree
         
         start = time.time()
-        basic_find(words, random_ind)
+        for ind in range(10000):
+            random_ind = random.randint(0, len(words) - 1)
+            basic_find(words, random_ind)
         end = time.time()
         print("Basic find\n---Time consumed in working: ",end - start)
 
-        start = time.time()
         sorted_tree = create_tree(words)
-        binary_sorted_tree(sorted_tree, random_word)
-        end = time.time()
-        print("Sorted binary tree\n---Time consumed in working: ",end - start)
-
         start = time.time()
-        random.shuffle(words)
+        for ind in range(1000):
+            random_word = words[ind]
+            binary_tree(sorted_tree, random_word)
+        end = time.time()
+        print("Sorted binary tree\n---Time consumed in working: ", 10 * (end - start))
+
         unsorted_tree = create_tree(words)
-        binary_tree(unsorted_tree, random_word)
-        end = time.time()
-        print("Shuffle binary tree\n---Time consumed in working: ",end - start)
-
+        random.shuffle(words)
         start = time.time()
-        unsorted_tree.rebalance()
-        balanced_binary_tree(unsorted_tree, random_word)
+        for ind in range(1000):
+            random_word = words[ind]
+            binary_tree(unsorted_tree, random_word)
         end = time.time()
-        print("Balanced binary tree\n---Time consumed in working: ",end - start)
+        print("Shuffle binary tree\n---Time consumed in working: ", 10 * (end - start))
+
+        unsorted_tree.rebalance()
+        start = time.time()
+        for ind in range(1000):
+            random_word = words[ind]
+            binary_tree(unsorted_tree, random_word)
+        end = time.time()
+        print("Balanced binary tree\n---Time consumed in working: ", 10 * (end - start))
 
 
 
